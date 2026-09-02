@@ -1,0 +1,134 @@
+.home {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.home-header {
+    background: var(--color-black);
+    color: #fff;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-red);
+    letter-spacing: 0.05em;
+}
+
+.home-nav {
+    display: flex;
+    gap: 24px;
+}
+
+.home-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.home-nav a:hover {
+    text-decoration: underline;
+}
+
+.card-link {
+    border: 1px solid var(--color-red);
+    padding: 6px 14px;
+    border-radius: 4px;
+}
+
+.hero-banner {
+    background: var(--color-surface);
+    text-align: center;
+    padding: 64px 24px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.hero-banner h1 {
+    margin: 0 0 12px;
+    font-size: 36px;
+    color: var(--color-black);
+}
+
+.hero-banner p {
+    margin: 0 0 24px;
+    color: var(--color-text-muted);
+    font-size: 18px;
+}
+
+.cta-button {
+    background: var(--color-red);
+    color: #fff;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cta-button:hover {
+    background: var(--color-red-hover);
+    transform: translateX(-1px) translateY(-2px);
+}
+
+.products-section {
+    padding: 48px 32px;
+    flex: 1;
+}
+
+.products-section h2 {
+    color: var(--color-black);
+    margin-bottom: 24px;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+.product-card {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.product-image-placeholder {
+    background: var(--color-surface);
+    border-radius: 4px;
+    aspect-ratio: 1 / 1;
+}
+
+.product-card h3 {
+    margin: 0;
+    font-size: 16px;
+    color: var(--color-black);
+}
+
+.product-price {
+    margin: 0;
+    font-weight: 700;
+    color: var(--color-red);
+}
+
+.add-to-cart-button {
+    background: var(--color-black);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.add-to-cart-button:hover {
+    background-color: var(--color-red);
+}
