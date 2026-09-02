@@ -91,4 +91,17 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(status).body(erro);
     }
+
+    @ExceptionHandler(CredenciaisInvalidasException.class)
+    public ResponseEntity<ApiError> tratarCredenciaisInvalidas(
+        CredenciaisInvalidasException exception,
+        HttpServletRequest request
+    ) {
+        return criarResposta(
+            HttpStatus.UNAUTHORIZED,
+            exception.getMessage(),
+            request.getRequestURI(),
+            Map.of()
+        );
+    }
 }
