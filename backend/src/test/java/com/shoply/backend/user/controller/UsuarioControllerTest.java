@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -74,7 +75,7 @@ class UsuarioControllerTest {
             .andExpect(status().isCreated())
             .andExpect(header().string(
                 "Location",
-                "/api/usuarios/" + id
+                "/api/usuarios/me"
             ))
             .andExpect(jsonPath("$.id").value(id.toString()))
             .andExpect(jsonPath("$.nome").value("Maria Silva"))
@@ -130,11 +131,38 @@ class UsuarioControllerTest {
 
     @Test
     void deveImpedirBuscaSemAutenticacao() throws Exception {
-        UUID id = UUID.randomUUID();
-
-        mockMvc.perform(get("/api/usuarios/{id}", id))
+        mockMvc.perform(get("/api/usuarios/me"))
             .andExpect(status().isUnauthorized());
 
         verify(usuarioService, never()).buscarPorId(any(UUID.class));
+    }
+
+    @Test
+    void deveBuscarProprioUsuarioComTokenValido() throws Exception {
+        UUID id = UUID.randomUUID();
+        Instant agora = Instant.now();
+
+        UsuarioResponse response = new UsuarioResponse(
+            id,
+            "Maria Silva",
+            "maria@exemplo.com",
+            PerfilUsuario.CLIENTE,
+            StatusUsuario.PENDENTE,
+            false,
+            agora,
+            agora
+        );
+
+        when(usuarioService.buscarPorId(id)).thenReturn(response);
+
+        mockMvc.perform(get("/api/usuarios/me")
+                .with(jwt().jwt(token -> token.subject(id.toString()))))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(id.toString()))
+            .andExpect(jsonPath("$.nome").value("Maria Silva"))
+            .andExpect(jsonPath("$.email").value("maria@exemplo.com"))
+            .andExpect(jsonPath("$.senhaHash").doesNotExist());
+
+        verify(usuarioService).buscarPorId(id);
     }
 }

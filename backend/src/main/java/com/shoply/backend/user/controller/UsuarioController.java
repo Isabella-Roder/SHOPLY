@@ -4,8 +4,9 @@ import java.net.URI;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,15 +34,17 @@ public class UsuarioController {
     ) {
         UsuarioResponse response = service.cadastrar(request);
 
-        URI localizacao = URI.create("/api/usuarios/" + response.id());
+        URI localizacao = URI.create("/api/usuarios/me");
 
         return ResponseEntity.created(localizacao).body(response);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UsuarioResponse> buscarUsuario(
-        @PathVariable UUID id
+    @GetMapping("/me")
+    public ResponseEntity<UsuarioResponse> buscarUsuarioAutenticado(
+        @AuthenticationPrincipal Jwt jwt
     ) {
-        return ResponseEntity.ok(service.buscarPorId(id));
+        UUID usuarioId = UUID.fromString(jwt.getSubject());
+
+        return ResponseEntity.ok(service.buscarPorId(usuarioId));
     }
 }
