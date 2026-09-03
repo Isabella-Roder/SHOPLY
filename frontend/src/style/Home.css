@@ -132,3 +132,17 @@
 .add-to-cart-button:hover {
     background-color: var(--color-red);
 }
+
+.logout-button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: inherit;
+    padding: 0;
+}
+
+.logout-button:hover {
+    text-decoration: underline;
+}

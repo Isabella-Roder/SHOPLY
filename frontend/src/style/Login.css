@@ -18,20 +18,20 @@
     flex-direction: column;
 }
 
-.cadastro-form h1 {
+.login-form h1 {
     color: var(--color-black);
     font-size: 24px;
     margin: 0 0 24px;
     text-align: center;
 }
 
-.cadastro-form label {
+.login-form label {
     font-weight: 600;
     margin-bottom: 4px;
     color: var(--color-text);
 }
 
-.cadastro-form input {
+.login-form input {
     border: 1px solid var(--color-border);
     border-radius: 4px;
     padding: 10px 12px;
@@ -39,7 +39,7 @@
     font-size: 16px;
 }
 
-.cadastro-form input:focus-visible {
+.login-form input:focus-visible {
     border-color: var(--color-red);
 }
 

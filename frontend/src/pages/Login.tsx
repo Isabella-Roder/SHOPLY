@@ -25,7 +25,7 @@ function Login() {
                 body: JSON.stringify({email: email.trim(), senha})
             });
 
-            if (resposta.ok) {
+            if (!resposta.ok) {
                 throw new Error("E-mail ou senha invalidos.");
             }
 

@@ -1,0 +1,31 @@
+.perfil-page {
+    max-width: 500px;
+    margin: 48px auto;
+    padding: 32px;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+}
+
+.perfil-page h1 {
+    color: var(--color-black);
+    font-size: 24px;
+    margin: 0 0 24px;
+}
+
+.perfil-dados {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    row-gap: 16px;
+    margin: 0;
+}
+
+.perfil-dados dt {
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.perfil-dados dd {
+    margin: 0;
+    color: var(--color-text);
+}

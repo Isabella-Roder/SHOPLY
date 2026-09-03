@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import '../style/Home.css';
+import { useNavigate } from 'react-router-dom';
 
 const featuredProducts = [
   { id: 1, name: 'Tênis Urban Runner', price: 'R$ 259,90' },
@@ -7,14 +9,48 @@ const featuredProducts = [
   { id: 4, name: 'Relógio Sport X', price: 'R$ 329,90' },
 ]
 
+const API_URL = "/api";
+
 function Home() {
+
+    const [usuarioLogado, setUsuarioLogado] = useState<{nome: string} | null>(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const token = localStorage.getItem("accessToken");
+        if (!token) return;
+
+        fetch(`${API_URL}/usuarios/me`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((dados) => setUsuarioLogado(dados))
+    }, []);
+
+    function handleLogut() {
+        localStorage.removeItem("accessToken");
+        setUsuarioLogado(null);
+        navigate("/");
+    }
+
     return (
         <div className="home">
             <header className="home-header">
                 <span className="logo">Shoply</span>
 
                 <nav className="home-nav">
-                    <a href="#">Entrar</a>
+
+                    {usuarioLogado ? (
+                        <>
+                            <span>Olá, {usuarioLogado.nome}</span>
+                            <button type="button" className="logout-button" onClick={handleLogut}>
+                                Sair
+                            </button>
+                        </>
+                    ): (
+                        <a href="/login">Entrar</a>
+                    )}
+
                     <a href="#" className='cart-link'>Carrinho</a>
                 </nav>
             </header>
