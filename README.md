@@ -29,7 +29,7 @@ A API sobe por padrão em `http://localhost:8080`.
 | Método | Rota | Descrição |
 | --- | --- | --- |
 | POST | `/api/usuarios` | Cadastra um novo usuário |
-| GET | `/api/usuarios/{id}` | Busca um usuário por ID |
+| GET | `/api/usuarios/me` | Busca os dados do usuário autenticado |
 | POST | `/api/autenticacao/login` | Autentica um usuário e retorna um access token |
 
 ## Frontend
