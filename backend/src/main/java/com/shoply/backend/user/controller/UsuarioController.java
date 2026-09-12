@@ -3,6 +3,7 @@ package com.shoply.backend.user.controller;
 import java.net.URI;
 import java.util.UUID;
 
+import com.shoply.backend.user.dto.LoginResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -46,5 +47,11 @@ public class UsuarioController {
         UUID usuarioId = UUID.fromString(jwt.getSubject());
 
         return ResponseEntity.ok(service.buscarPorId(usuarioId));
+    }
+
+    @PostMapping("/me/tornar-vendedor")
+    public ResponseEntity<LoginResponse> tornarVendedor(@AuthenticationPrincipal Jwt jwt) {
+        UUID usuarioId = UUID.fromString(jwt.getSubject());
+        return ResponseEntity.ok(service.tornarVendedor(usuarioId));
     }
 }

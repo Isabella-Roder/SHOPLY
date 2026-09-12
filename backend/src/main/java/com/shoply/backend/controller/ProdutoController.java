@@ -90,5 +90,12 @@ public class ProdutoController {
         return ResponseEntity.ok(service.listarAtivos());
     }
 
+    @GetMapping("/meus")
+    @PreAuthorize("hasRole('VENDEDOR')")
+    public ResponseEntity<List<ProdutoResponse>> listarMeusProdutos(@AuthenticationPrincipal Jwt jwt) {
+        UUID vendedorId = UUID.fromString(jwt.getSubject());
+        return ResponseEntity.ok(service.listarPorVendedor(vendedorId));
+    }
+
 
 }

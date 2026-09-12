@@ -3,6 +3,8 @@ package com.shoply.backend.user.service;
 import java.util.Locale;
 import java.util.UUID;
 
+import com.shoply.backend.security.TokenService;
+import com.shoply.backend.user.dto.LoginResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +21,16 @@ public class UsuarioService {
     
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TokenService tokenService;
 
     public UsuarioService(
         UsuarioRepository usuarioRepository,
-        PasswordEncoder passwordEncoder
+        PasswordEncoder passwordEncoder,
+        TokenService tokenService
     ) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
+        this.tokenService = tokenService;
     }
 
     private String normalizarEmail(String email) {
@@ -65,6 +70,20 @@ public class UsuarioService {
         Usuario salvo = usuarioRepository.save(usuario);
 
         return converterParaResponse(salvo);
+    }
+
+    @Transactional
+    public LoginResponse tornarVendedor(UUID id) {
+        Usuario usuario = buscarEntidade(id);
+        usuario.tornarVendedor();
+        String accessToken = tokenService.gerarToken(usuario);
+
+        return new LoginResponse(
+                accessToken,
+                "Bearer",
+                tokenService.getExpiracaoEmSegundos(),
+                converterParaResponse(usuario)
+        );
     }
 
     @Transactional(readOnly = true)

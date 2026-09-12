@@ -117,4 +117,17 @@ public class GlobalExceptionHandler {
             Map.of()
         );
     }
+
+    @ExceptionHandler(OperacaoInvalidaException.class)
+    public ResponseEntity<ApiError> tratarOperacaoInvalida(
+            OperacaoInvalidaException exception,
+            HttpServletRequest request
+    ) {
+        return criarResposta(
+                HttpStatus.CONFLICT,
+                exception.getMessage(),
+                request.getRequestURI(),
+                Map.of()
+        );
+    }
 }

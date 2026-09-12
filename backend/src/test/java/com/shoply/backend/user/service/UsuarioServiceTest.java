@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.shoply.backend.common.exception.EmailJaCadastradoException;
+import com.shoply.backend.security.TokenService;
 import com.shoply.backend.user.dto.CadastroUsuarioRequest;
 import com.shoply.backend.user.dto.UsuarioResponse;
 import com.shoply.backend.user.model.PerfilUsuario;
@@ -33,13 +34,17 @@ class UsuarioServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
 
+    @Mock
+    private TokenService tokenService;
+
     private UsuarioService usuarioService;
 
     @BeforeEach
     void configurar() {
         usuarioService = new UsuarioService(
             usuarioRepository,
-            passwordEncoder
+            passwordEncoder,
+            tokenService
         );
     }
 

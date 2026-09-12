@@ -3,6 +3,7 @@ package com.shoply.backend.user.model;
 import java.time.Instant;
 import java.util.UUID;
 
+import com.shoply.backend.common.exception.OperacaoInvalidaException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -80,6 +81,14 @@ public class Usuario {
 
     public void verificarEmail() {
         emailVerificado = true;
+    }
+
+    public void tornarVendedor() {
+        if (perfil != PerfilUsuario.CLIENTE) {
+            throw new OperacaoInvalidaException("Apenas contas de comprador podem se tornar vendedoras.");
+        }
+
+        perfil = PerfilUsuario.VENDEDOR;
     }
 
     public UUID getId() {

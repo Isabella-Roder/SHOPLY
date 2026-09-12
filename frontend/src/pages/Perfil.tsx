@@ -14,6 +14,7 @@ function Perfil() {
   
     const [usuario, setUsuario] = useState<Usuario | null>(null);
     const [erro, setErro] = useState("");
+    const [carregandoAcao, setCarregandoAcao] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
@@ -29,6 +30,32 @@ function Perfil() {
             .catch(() => setErro("Não foi possivel carregar seus dados."));
     }, []);
 
+    async function handleTornarVendedor() {
+        setCarregandoAcao(true);
+        setErro("");
+
+        const token = localStorage.getItem("accessToken");
+
+        try {
+            const resposta = await fetch(`${API_URL}/usuarios/me/tornar-vendedor`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (!resposta.ok) {
+                throw new Error("Não foi possivel atualizar sua conta.");
+            }
+
+            const dados = await resposta.json();
+            localStorage.setItem("accessToken", dados.accessToken);
+            setUsuario(dados.usuario);
+        } catch {
+            setErro("Não foi possivel atualizar sua conta. Tente novamente.");
+        } finally {
+            setCarregandoAcao(false);
+        }
+    }
+
     if (erro) {
         return (
             <p className="form-error" role="alert">
@@ -41,25 +68,39 @@ function Perfil() {
         return <p>Carregando...</p>
     }
 
+    const inicial = usuario.nome.trim().charAt(0).toUpperCase();
+
     return (
         <div className="perfil-page">
-            <h1>Meu perfil</h1>
+            <div className="perfil-card">
+                <div className="perfil-cabecalho">
+                    <div className="perfil-avatar" aria-hidden="true">{inicial}</div>
+                    <div>
+                        <h1>{usuario.nome}</h1>
+                        <p className="perfil-email">{usuario.email}</p>
+                    </div>
+                </div>
 
-            <ul className="perfil-dados">
-                <dt>Nome</dt>
-                <dd>{usuario.nome}</dd>
+                <div className="perfil-badges">
+                    <span className={`badge badge-perfil-${usuario.perfil.toLowerCase()}`}>
+                        {usuario.perfil}
+                    </span>
+                    <span className={`badge badge-status-${usuario.status.toLowerCase()}`}>
+                        {usuario.status}
+                    </span>
+                </div>
 
-                <dt>E-mail</dt>
-                <dd>{usuario.email}</dd>
-
-                <dt>Perfil</dt>
-                <dd>{usuario.perfil}</dd>
-
-                <dt>Status</dt>
-                <dd>{usuario.status}</dd>
-            </ul>
+                {usuario.perfil === "CLIENTE" && (
+                    <div className="perfil-acao">
+                        <p>Quer vender seus próprios produtos no Shoply?</p>
+                        <button type={"button"} className="submit-button" onClick={handleTornarVendedor} disabled={carregandoAcao}>
+                            {carregandoAcao ? "Atualizando..." : "Tornar-se vendedor"}
+                        </button>
+                    </div>
+                )}
+            </div>
         </div>
-    )
+    );
 }
 
 export default Perfil;
