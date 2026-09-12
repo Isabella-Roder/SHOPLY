@@ -1,0 +1,65 @@
+.novo-produto-page {
+    display: flex;
+    justify-content: center;
+    padding: 3rem 1rem;
+    background-color: var(--color-bg);
+    min-height: 100vh;
+}
+
+.novo-produto-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 420px;
+    background-color: var(--color-surface);
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+}
+
+.novo-produto-form h1 {
+    color: var(--color-black);
+    margin-bottom: 0.5rem;
+}
+
+.novo-produto-form label {
+    color: var(--color-text);
+    font-weight: 600;
+}
+
+.novo-produto-form input, .novo-produto-form textarea {
+    padding: 0.6rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.novo-produto-form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.novo-produto-form .submit-button {
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    background-color: var(--color-red);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.novo-produto-form .submit-button:hover {
+    background-color: var(--color-red-hover);
+}
+
+.novo-produto-form .form-error {
+    color: var(--color-red);
+    background-color: #fdecea;
+    border: 1px solid var(--color-red);
+    border-radius: 4px;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+}
