@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.shoply.backend.common.exception.AcessoNegadoException;
 import com.shoply.backend.common.exception.UsuarioNaoEncontradoException;
 import com.shoply.backend.dtos.CadastroProdutoRequest;
 import com.shoply.backend.dtos.ProdutoResponse;
@@ -39,6 +40,12 @@ public class ProdutoService {
             .orElseThrow(() -> new UsuarioNaoEncontradoException(vendedorId));
     }
 
+    private void validarDono(Produto produto, UUID vendedorId) {
+        if (!produto.getVendedor().getId().equals(vendedorId)) {
+            throw new AcessoNegadoException();
+        }
+    }
+
     @Transactional 
     public ProdutoResponse cadastrar(UUID vendedorId, CadastroProdutoRequest request) {
         Usuario vendedor = buscarVendedor(vendedorId);
@@ -60,6 +67,7 @@ public class ProdutoService {
     public ProdutoResponse atualizar(UUID vendedorId, UUID id, CadastroProdutoRequest request) {
         buscarVendedor(vendedorId);
         Produto produto = buscarEntidade(id);
+        validarDono(produto, vendedorId);
 
         produto.setNome(request.nome());
         produto.setDescricao(request.descricao());
@@ -68,24 +76,27 @@ public class ProdutoService {
         produto.setCategoria(request.categoria());
         produto.setImagemUrl(request.imagemUrl());
 
-        return ProdutoResponse.from(produto);
+        return ProdutoResponse.from(produtoRepository.save(produto));
     }
 
     @Transactional
-    public void deletar(UUID id) {
+    public void deletar(UUID vendedorId, UUID id) {
         Produto produto = buscarEntidade(id);
+        validarDono(produto, vendedorId);
         produtoRepository.delete(produto);
     }
 
-    @Transactional 
-    public void desativar(UUID id) {
+    @Transactional
+    public void desativar(UUID vendedorId, UUID id) {
         Produto produto = buscarEntidade(id);
+        validarDono(produto, vendedorId);
         produto.desativar();
     }
 
-    @Transactional 
-    public void ativar(UUID id) {
+    @Transactional
+    public void ativar(UUID vendedorId, UUID id) {
         Produto produto = buscarEntidade(id);
+        validarDono(produto, vendedorId);
         produto.ativar();
     }
 

@@ -50,6 +50,7 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('VENDEDOR')")
     public ResponseEntity<ProdutoResponse> atualizar(
         @AuthenticationPrincipal Jwt jwt,
         @PathVariable UUID id,
@@ -61,20 +62,26 @@ public class ProdutoController {
     }
 
     @PatchMapping("/{id}/desativar")
-    public ResponseEntity<Void> desativar(@PathVariable UUID id) {
-        service.desativar(id);
+    @PreAuthorize("hasRole('VENDEDOR')")
+    public ResponseEntity<Void> desativar(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id) {
+        UUID vendedorId = UUID.fromString(jwt.getSubject());
+        service.desativar(vendedorId, id);
         return ResponseEntity.noContent().build();
-    } 
+    }
 
     @PatchMapping("/{id}/ativar")
-    public ResponseEntity<Void> ativar(@PathVariable UUID id) {
-        service.ativar(id);
+    @PreAuthorize("hasRole('VENDEDOR')")
+    public ResponseEntity<Void> ativar(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id) {
+        UUID vendedorId = UUID.fromString(jwt.getSubject());
+        service.ativar(vendedorId, id);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable UUID id) {
-        service.deletar(id);
+    @PreAuthorize("hasRole('VENDEDOR')")
+    public ResponseEntity<Void> deletar(@AuthenticationPrincipal Jwt jwt, @PathVariable UUID id) {
+        UUID vendedorId = UUID.fromString(jwt.getSubject());
+        service.deletar(vendedorId, id);
         return ResponseEntity.noContent().build();
     }
 

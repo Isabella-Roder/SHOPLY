@@ -92,6 +92,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(erro);
     }
 
+    @ExceptionHandler(AcessoNegadoException.class)
+    public ResponseEntity<ApiError> tratarAcessoNegado(
+        AcessoNegadoException exception,
+        HttpServletRequest request
+    ) {
+        return criarResposta(
+            HttpStatus.FORBIDDEN,
+            exception.getMessage(),
+            request.getRequestURI(),
+            Map.of()
+        );
+    }
+
     @ExceptionHandler(CredenciaisInvalidasException.class)
     public ResponseEntity<ApiError> tratarCredenciaisInvalidas(
         CredenciaisInvalidasException exception,
