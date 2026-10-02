@@ -69,7 +69,7 @@ public class ProdutoService {
         Produto produto = buscarEntidade(id);
         validarDono(produto, vendedorId);
 
-        produto.setNome(request.nome());
+        produto.setNome(request.nome().trim());
         produto.setDescricao(request.descricao());
         produto.setPreco(request.preco());
         produto.setEstoque(request.estoque());
