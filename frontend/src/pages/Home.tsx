@@ -12,14 +12,20 @@ type Produto = {
     status: string;
     vendedorId: string;
     imagemUrl: string | null;
-}
+};
+
+type UsuarioLogado = {
+    nome: string;
+    perfil: string;
+};
 
 const API_URL = "/api";
 
 function Home() {
 
-    const [usuarioLogado, setUsuarioLogado] = useState<{nome: string} | null>(null);
+    const [usuarioLogado, setUsuarioLogado] = useState<UsuarioLogado | null>(null);
     const [produtos, setProdutos] = useState<Produto[]>([]);
+    const [carregandoProdutos, setCarregandoProdutos] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -37,6 +43,7 @@ function Home() {
         fetch(`${API_URL}/produtos`)
             .then((res) => (res.ok ? res.json() : []))
             .then((dados) => setProdutos(dados))
+            .finally(() => setCarregandoProdutos(false));
     }, []);
 
     function handleLogout() {
@@ -56,11 +63,15 @@ function Home() {
         <div className="home">
             <header className="home-header">
                 <span className="logo">Shoply</span>
+
                 <nav className="home-nav">
                     {usuarioLogado ? (
                         <>
-                            <span>Olá {usuarioLogado.nome}</span>
-                            <button type="button" className="logout-button" onClick={handleLogout}>
+                            {usuarioLogado.perfil === "VENDEDOR" && (
+                                <a href="/painel">Vender</a>
+                            )}
+                            <a href="/perfil">Olá, {usuarioLogado.nome}</a>
+                            <button type="button" className="logout-button" onSubmit={handleLogout}>
                                 Sair
                             </button>
                         </>
@@ -70,6 +81,7 @@ function Home() {
                     <a href="#" className="cart-link">Carrinho</a>
                 </nav>
             </header>
+
             <section className="hero-banner">
                 <h1>Encontre tudo em um só lugar</h1>
                 <p>Produtos de diversos vendedores com entrega rápida.</p>
@@ -80,14 +92,28 @@ function Home() {
 
             <section className="products-section">
                 <h2>Destaques</h2>
-
-                {produtos.length === 0 ? (
+                {carregandoProdutos ? (
+                    <p className="products-status">Carregando produtos...</p>
+                ) : (
+                    produtos.length === 0 ? (
                     <p className="products-empty">Nenhum produto disponível no momento.</p>
                 ) : (
                     <div className="product-grid">
                         {produtos.map((produto) => (
                             <article key={produto.id} className="product-card">
-                                <div className="product-image-placeholder" aria-hidden="true" />
+                                {produto.imagemUrl ? (
+                                    <img className='product-image' src={produto.imagemUrl} alt={produto.nome} />
+                                ) : (
+                                    <div className="product-image-placeholder" aria-hidden="true">
+                                        <span>{produto.nome.charAt(0).toUpperCase()}</span>
+                                    </div>
+                                )}
+
+                                <div className="product-card-body">
+                                    {produto.categoria && (
+                                        <span className="product-categoria">{produto.categoria}</span>
+                                    )}
+                                </div>
 
                                 <h3>{produto.nome}</h3>
                                 <p className="product-price">{formatarPreco(produto.preco)}</p>
@@ -97,7 +123,7 @@ function Home() {
                             </article>
                         ))}
                     </div>
-                )}
+                ))}
             </section>
         </div>
     )
