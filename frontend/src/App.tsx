@@ -7,6 +7,7 @@ import Perfil from "./pages/Perfil";
 import {NovoProduto} from "./pages/NovoProduto.tsx";
 import {PainelVendedor} from "./pages/PainelVendedor.tsx";
 import DetalheProduto from "./pages/DetalheProduto.tsx";
+import Carrinho from "./pages/Carrinho.tsx";
 
 function App() {
     return(
@@ -15,6 +16,7 @@ function App() {
             <Route path="/produtos/:id" element={<DetalheProduto />} />
             <Route path="/cadastro" element={<Cadastro />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/carrinho" element={<Carrinho />} />
 
             <Route element={<RotaProtegida />} >
                 <Route path="/perfil" element={<Perfil/>}/>

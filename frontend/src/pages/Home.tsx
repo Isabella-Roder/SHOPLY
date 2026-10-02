@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import '../style/Home.css';
 import { Link, useNavigate } from 'react-router-dom';
+import { useCarrinho } from '../context/CarrinhoContext';
 
 type Produto = {
     id: string;
@@ -27,6 +28,8 @@ function Home() {
     const [produtos, setProdutos] = useState<Produto[]>([]);
     const [carregandoProdutos, setCarregandoProdutos] = useState(true);
     const navigate = useNavigate();
+
+    const { adicionarItem, totalItens } = useCarrinho();
 
     useEffect(() => {
         const token = localStorage.getItem("accessToken");
@@ -78,7 +81,9 @@ function Home() {
                     ) : (
                         <a href="/login">Entrar</a>
                     )}
-                    <a href="#" className="cart-link">Carrinho</a>
+                    <Link to="/carrinho" className='cart-link'>
+                        Carrinho {totalItens > 0 && <span className='cart-badge'>{totalItens}</span>}
+                    </Link>
                 </nav>
             </header>
 
@@ -101,7 +106,7 @@ function Home() {
                     <div className="products-grid">
                         {produtos.map((produto) => (
                             <article key={produto.id} className="product-card">
-                                <Link key={produto.id} to={`/produtos/${produto.id}`} className='product-card'>
+                                <Link key={produto.id} to={`/produtos/${produto.id}`} className='product-card-link'>
                                     {produto.imagemUrl ? (
                                         <img className='product-image' src={produto.imagemUrl} alt={produto.nome} />
                                     ) : (
@@ -119,7 +124,14 @@ function Home() {
                                     <h3>{produto.nome}</h3>
                                     <p className="product-price">{formatarPreco(produto.preco)}</p>
                                 </Link>
-                                <button className="add-to-cart-button" type="button">
+                                <button className="add-to-cart-button" type="button"
+                                    onClick={() => adicionarItem({
+                                        id: produto.id,
+                                        nome: produto.nome,
+                                        preco: produto.preco,
+                                        imagemUrl: produto.imagemUrl
+                                    })}
+                                >
                                     Adicionar ao carrinho
                                 </button>
                             </article>

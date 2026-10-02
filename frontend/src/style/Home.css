@@ -194,3 +194,20 @@
 .logout-button:hover {
     text-decoration: underline;
 }
+
+.product-card-link {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+}
+
+.cart-badge {
+    background: var(--color-red);
+    color: #fff;
+    border-radius: 999px;
+    padding: 0 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-left: 4px;
+}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import "../style/DetalheProduto.css";
+import { useCarrinho } from "../context/CarrinhoContext";
 
 const API_URL = "/api";
 
@@ -29,6 +30,8 @@ export default function DetalheProduto() {
     const [produto, setProduto] = useState<Produto | null>(null);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState<string | null>(null);
+
+    const { adicionarItem } = useCarrinho();
 
     useEffect(() => {
         fetch(`${API_URL}/produtos/${id}`)
@@ -92,6 +95,12 @@ export default function DetalheProduto() {
                         type="button"
                         className="add-to-cart-button"
                         disabled={produto.estoque === 0 || produto.status !== "ATIVO"}
+                        onClick={() => adicionarItem({
+                            id: produto.id,
+                            nome: produto.nome,
+                            preco: produto.preco,
+                            imagemUrl: produto.imagemUrl
+                        })}
                     >
                         Adicionar no carrinho
                     </button>
