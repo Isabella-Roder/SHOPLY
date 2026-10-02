@@ -6,11 +6,13 @@ import RotaProtegida from "./components/RotaProtegida";
 import Perfil from "./pages/Perfil";
 import {NovoProduto} from "./pages/NovoProduto.tsx";
 import {PainelVendedor} from "./pages/PainelVendedor.tsx";
+import DetalheProduto from "./pages/DetalheProduto.tsx";
 
 function App() {
     return(
         <Routes>
             <Route path="/" element={<Home/>}/>
+            <Route path="/produtos/:id" element={<DetalheProduto />} />
             <Route path="/cadastro" element={<Cadastro />} />
             <Route path="/login" element={<Login />} />
 

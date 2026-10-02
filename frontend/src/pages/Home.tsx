@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import '../style/Home.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 type Produto = {
     id: string;
@@ -71,7 +71,7 @@ function Home() {
                                 <a href="/painel">Vender</a>
                             )}
                             <a href="/perfil">Olá, {usuarioLogado.nome}</a>
-                            <button type="button" className="logout-button" onSubmit={handleLogout}>
+                            <button type="button" className="logout-button" onClick={handleLogout}>
                                 Sair
                             </button>
                         </>
@@ -96,27 +96,29 @@ function Home() {
                     <p className="products-status">Carregando produtos...</p>
                 ) : (
                     produtos.length === 0 ? (
-                    <p className="products-empty">Nenhum produto disponível no momento.</p>
+                    <p className="products-status">Nenhum produto disponível no momento.</p>
                 ) : (
-                    <div className="product-grid">
+                    <div className="products-grid">
                         {produtos.map((produto) => (
                             <article key={produto.id} className="product-card">
-                                {produto.imagemUrl ? (
-                                    <img className='product-image' src={produto.imagemUrl} alt={produto.nome} />
-                                ) : (
-                                    <div className="product-image-placeholder" aria-hidden="true">
-                                        <span>{produto.nome.charAt(0).toUpperCase()}</span>
-                                    </div>
-                                )}
-
-                                <div className="product-card-body">
-                                    {produto.categoria && (
-                                        <span className="product-categoria">{produto.categoria}</span>
+                                <Link key={produto.id} to={`/produtos/${produto.id}`} className='product-card'>
+                                    {produto.imagemUrl ? (
+                                        <img className='product-image' src={produto.imagemUrl} alt={produto.nome} />
+                                    ) : (
+                                        <div className="product-image-placeholder" aria-hidden="true">
+                                            <span>{produto.nome.charAt(0).toUpperCase()}</span>
+                                        </div>
                                     )}
-                                </div>
 
-                                <h3>{produto.nome}</h3>
-                                <p className="product-price">{formatarPreco(produto.preco)}</p>
+                                    <div className="product-card-body">
+                                        {produto.categoria && (
+                                            <span className="product-categoria">{produto.categoria}</span>
+                                        )}
+                                    </div>
+
+                                    <h3>{produto.nome}</h3>
+                                    <p className="product-price">{formatarPreco(produto.preco)}</p>
+                                </Link>
                                 <button className="add-to-cart-button" type="button">
                                     Adicionar ao carrinho
                                 </button>

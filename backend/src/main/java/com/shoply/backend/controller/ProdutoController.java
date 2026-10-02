@@ -97,5 +97,9 @@ public class ProdutoController {
         return ResponseEntity.ok(service.listarPorVendedor(vendedorId));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ProdutoResponse> buscarPorId(@PathVariable UUID id) {
+        return ResponseEntity.ok(service.buscarPorId(id));
+    }
 
 }
